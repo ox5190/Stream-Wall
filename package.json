@@ -1,0 +1,12 @@
+{
+  "name": "stream-wall",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local multiview app for YouTube, CHZZK, SOOP, and Twitch streams.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
