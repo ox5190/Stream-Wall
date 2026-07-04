@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stream Wall</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Stream Wall</h1>
+        <p>유튜브, 치지직, SOOP, 트위치를 한 화면에서 보는 멀티뷰어입니다.</p>
+      </div>
+      <div class="top-actions">
+        <button id="viewerMode" type="button" title="영상만 보기">보기</button>
+        <button id="copyLink" type="button" title="현재 배치 링크 복사">링크</button>
+        <button id="reloadAll" type="button" title="전체 새로고침">전체 새로고침</button>
+        <button id="clearStreams" type="button" title="전체 비우기">전체 삭제</button>
+      </div>
+    </header>
+
+    <button id="exitViewerMode" class="exit-viewer" type="button" title="편집 화면으로 돌아가기">편집</button>
+
+    <main>
+      <form id="addForm" class="composer">
+        <label>
+          <span>플랫폼</span>
+          <select id="platform">
+            <option value="auto">자동 감지</option>
+            <option value="youtube">YouTube</option>
+            <option value="chzzk">CHZZK</option>
+            <option value="soop">SOOP</option>
+            <option value="twitch">Twitch</option>
+            <option value="url">직접 URL</option>
+          </select>
+        </label>
+        <label class="wide">
+          <span>주소 또는 ID</span>
+          <input id="streamInput" type="text" autocomplete="off" placeholder="예: y:@youtube / 치지직 UID / soopid / t:twitchid">
+        </label>
+        <button type="submit">추가</button>
+      </form>
+
+      <section class="controls" aria-label="보기 설정">
+        <label>
+          <span>배치</span>
+          <select id="columns">
+            <option value="auto">자동</option>
+            <option value="1">1열</option>
+            <option value="2">2열</option>
+            <option value="3">3열</option>
+            <option value="4">4열</option>
+          </select>
+        </label>
+        <label>
+          <span>프리셋</span>
+          <select id="presetList">
+            <option value="">프리셋 선택</option>
+          </select>
+        </label>
+        <button id="savePreset" type="button">프리셋 저장</button>
+        <button id="loadPreset" type="button">불러오기</button>
+        <button id="deletePreset" type="button">삭제</button>
+        <label class="toggle">
+          <input id="compactMode" type="checkbox">
+          <span>간격 줄이기</span>
+        </label>
+        <label class="toggle">
+          <input id="muteNew" type="checkbox" checked>
+          <span>새 영상 음소거</span>
+        </label>
+      </section>
+
+      <section class="shortcut-bar" aria-label="Button help">
+        <strong>도움말</strong>
+        <span class="help-item"><kbd>원본</kbd><span>플랫폼 페이지 열기</span></span>
+        <span class="help-item"><kbd>T</kbd><span>제목 변경</span></span>
+        <span class="help-item"><kbd>W</kbd><span>큰 화면 고정</span></span>
+        <span class="help-item"><kbd>F</kbd><span>타일 전체화면</span></span>
+        <span class="help-item"><kbd>&lt;</kbd><kbd>&gt;</kbd><span>위치 이동</span></span>
+        <span class="help-item"><kbd>R</kbd><span>새로고침</span></span>
+        <span class="help-item"><kbd>M/A</kbd><span>음소거/소리</span></span>
+        <span class="help-item"><kbd>보관</kbd><span>아래로 빼기</span></span>
+        <span class="help-item"><kbd>X</kbd><span>삭제</span></span>
+        <span class="divider"></span>
+        <span class="help-item"><kbd>V</kbd><span>영상만 보기</span></span>
+        <span class="help-item"><kbd>Esc</kbd><span>편집 화면</span></span>
+        <span class="help-item"><kbd>C</kbd><span>열 개수 변경</span></span>
+      </section>
+
+      <section id="notice" class="notice" hidden></section>
+      <section id="grid" class="stream-grid" aria-live="polite"></section>
+      <section id="parkedSection" class="parked-section" hidden>
+        <div class="section-heading">
+          <h2>보관한 방송</h2>
+          <span>꺼졌거나 나중에 다시 볼 방송을 아래에 빼둡니다.</span>
+        </div>
+        <section id="parkedGrid" class="parked-grid" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <template id="emptyTemplate">
+      <div class="empty">
+        <strong>아직 추가된 방송이 없습니다.</strong>
+        <span>주소나 ID를 입력하면 바로 타일이 추가됩니다.</span>
+      </div>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
