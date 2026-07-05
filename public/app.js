@@ -1,127 +1,3 @@
-
-편집모드에서 자동 배열이 너무커 4열을 기준으로 바꿔줘
-오후 6:11
-
-49s 동안 작업
-편집모드 자동 배열을 4열 기준으로 바꿨어요.
-
-기존에는 타일 최소 폭이 560px이라 크게 잡혀서 보통 3열처럼 보였고, 지금은 420px 기준이라 넓은 화면에서는 4열로 들어갑니다.
-전체화면 보기 모드 배치는 건드리지 않았습니다.
-
-수정 파일: public/styles.css (line 353)
-
-
-styles.css 수정됨
-+1
--1
-오후 6:12
-세로만 줄었고 가로배열은 안줄었어 가로로 4개들어ㅓ가ㅔ
-오후 6:13
-
-34s 동안 작업
-맞아요. 방금은 크기만 줄고 “무조건 4열”은 아니었어요.
-
-이제 편집모드 자동 배열을 진짜로 가로 4개 고정으로 바꿨습니다.
-
-일반 PC 화면: 4열
-좁은 창/태블릿: 2열
-모바일 폭: 1열
-보기 전체화면 모드: 기존 배치 유지
-수정 위치: public/styles.css (line 353)
-
-
-styles.css 수정됨
-+9
--1
-오후 6:13
-https://stream-wall.onrender.com/ 안바껴
-오후 6:15
-
-16s 동안 작업
-맞아요. https://stream-wall.onrender.com/은 Render 서버에 올라간 버전이라서, 제가 여기 로컬에서 바꾼 내용은 아직 반영되지 않은 상태예요.
-
-지금 올려야 하는 파일은 최소 이 2개입니다.
-
-public/styles.css
-편집모드 4열, 전체화면 3개 배치 수정
-public/app.js
-타일 안 복사 버튼 추가
-해야 할 순서:
-
-GitHub의 Stream-Wall 저장소로 가기
-public/styles.css 파일 들어가기
-연필 버튼 눌러서 로컬 파일 내용으로 교체 후 Commit changes
-public/app.js도 똑같이 교체 후 Commit changes
-Render에서 자동 배포 기다리기
-또는 Manual Deploy → Deploy latest commit
-배포 끝났는데도 안 바뀌면 브라우저에서 Ctrl + F5로 강력 새로고침 해보세요.
-지금 로컬 파일에는 4열 수정이 들어가 있는 것 확인했습니다.
-
-오후 6:16
-사용자 첨부 파일
-여기까지왔는데 내용교체방법
-오후 6:22
-지금은 README.md를 열어둔 상태라, 먼저 왼쪽 파일 목록에서 바꿀 파일을 눌러야 해요.
-
-이번에 반영해야 할 건 이 순서입니다.
-
-왼쪽에서 공공의 폴더처럼 보이는 public 폴더를 클릭해서 펼치기
-그 안에서 styles.css 클릭
-화면 가운데 코드 전체 선택: Ctrl + A
-로컬 파일 public/styles.css를 열어서 내용 전체 복사
-GitHub 화면에 붙여넣기: Ctrl + V
-오른쪽 위 초록 버튼 변경 사항을 저장... 클릭
-커밋 메시지는 예: Update layout styles
-저장
-그다음 똑같이:
-
-왼쪽 public 폴더 안에서 app.js 클릭
-Ctrl + A
-로컬 public/app.js 내용 전체 복사
-붙여넣기
-변경 사항을 저장...
-메시지: Add copy button
-지금 화면에서 제일 먼저 할 건 왼쪽 public 폴더를 펼치고 styles.css를 여는 것입니다.
-
-오후 6:22
-헐 잘못해서 server.,js파일을 styles.css넣고 저장해버렷어
-오후 6:51
-
-22s 동안 작업
-괜찮아요. 로컬 server.js는 정상이고, 제가 정상 server.js 내용을 클립보드에 복사해놨어요.
-
-지금 GitHub에서 이렇게 하세요:
-
-왼쪽 파일 목록에서 server.js 클릭
-편집 화면에서 Ctrl + A
-Ctrl + V
-오른쪽 위 변경 사항을 저장...
-커밋 메시지: Restore server.js
-저장
-그다음 Render가 다시 배포되면 서버 파일은 복구됩니다.
-
-그 후에 다시 해야 할 것:
-
-public/styles.css에는 styles.css 내용 넣기
-public/app.js에는 app.js 내용 넣기
-지금 제일 먼저는 server.js 복구부터 하세요.
-
-오후 6:51
-
-
-
-
-출력
-localhost:5177
-README.md
-/C:/Users/5/OneDrive/Desktop/%EC%BD%94%EB%8D%B1%EC%8A%A4_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/public/index.html
-
-출처
-
-
-코덱스_프로젝트
-public
-app.js
 const STORAGE_KEY = 'stream-wall:v2';
 const PRESET_KEY = 'stream-wall:presets:v1';
 
@@ -222,3 +98,634 @@ function restore() {
   try {
     applySnapshot(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
   } catch {}
+}
+
+function getPresets() {
+  try {
+    const presets = JSON.parse(localStorage.getItem(PRESET_KEY) || '[]');
+    return Array.isArray(presets) ? presets : [];
+  } catch {
+    return [];
+  }
+}
+
+function setPresets(presets) {
+  localStorage.setItem(PRESET_KEY, JSON.stringify(presets));
+}
+
+function renderPresets() {
+  const current = presetList.value;
+  presetList.innerHTML = '<option value="">프리셋 선택</option>';
+  for (const preset of getPresets()) {
+    const option = document.createElement('option');
+    option.value = preset.name;
+    option.textContent = preset.name;
+    presetList.append(option);
+  }
+  presetList.value = current;
+}
+
+function cleanInput(raw) {
+  return raw.trim().replace(/^https?:\/\/mul\.live\//i, '').replace(/^\/+|\/+$/g, '');
+}
+
+function splitStreamInputs(raw) {
+  const trimmed = raw.trim();
+  const cleaned = cleanInput(trimmed);
+  if (!cleaned) return [];
+
+  const isUrl = /^https?:\/\//i.test(trimmed) && !/^https?:\/\/mul\.live\//i.test(trimmed);
+  if (isUrl) return [trimmed];
+
+  return cleaned.split('/').map((part) => part.trim()).filter(Boolean);
+}
+
+function parseYouTubeId(value) {
+  if (/^[a-zA-Z0-9_-]{11}$/.test(value)) return value;
+
+  try {
+    const url = new URL(value);
+    const host = url.hostname.replace(/^www\./, '');
+    if (host === 'youtu.be') {
+      const id = url.pathname.split('/').filter(Boolean)[0];
+      return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+    }
+    if (host === 'youtube.com' || host === 'm.youtube.com') {
+      const id = url.searchParams.get('v');
+      return /^[a-zA-Z0-9_-]{11}$/.test(id || '') ? id : null;
+    }
+  } catch {}
+
+  return null;
+}
+
+function detectPlatform(value, selected) {
+  if (selected !== 'auto') return selected;
+  if (value.startsWith('y:') || value.includes('youtube.com') || value.includes('youtu.be')) return 'youtube';
+  if (value.startsWith('t:') || value.includes('twitch.tv')) return 'twitch';
+  if (value.includes('chzzk.naver.com') || /^[0-9a-f]{32}$/i.test(value)) return 'chzzk';
+  if (value.includes('sooplive') || value.includes('afreecatv') || /^(?:[as]c?:)?[a-z0-9]{3,12}$/i.test(value)) return 'soop';
+  return 'url';
+}
+
+function extractPathId(value) {
+  try {
+    const url = new URL(value);
+    const parts = url.pathname.split('/').filter(Boolean);
+    return parts.at(-1) || value;
+  } catch {
+    return value;
+  }
+}
+
+function normalizeTwitch(value) {
+  const cleaned = value.replace(/^t:/i, '').trim();
+  try {
+    const url = new URL(cleaned);
+    const parts = url.pathname.split('/').filter(Boolean);
+    return parts[0] || '';
+  } catch {
+    return cleaned;
+  }
+}
+
+function normalizeSoop(value) {
+  const cleaned = value.replace(/^(?:[as]c?:)/i, '').trim();
+  try {
+    const url = new URL(cleaned);
+    const parts = url.pathname.split('/').filter(Boolean);
+    return parts[0] || parts.at(-1) || '';
+  } catch {
+    return cleaned;
+  }
+}
+
+function buildFrame(stream) {
+  const mute = stream.muted ? '1' : '0';
+  const parent = window.location.hostname || 'localhost';
+
+  switch (stream.type) {
+    case 'youtube':
+      return `https://www.youtube.com/embed/${encodeURIComponent(stream.id)}?autoplay=1&mute=${mute}`;
+    case 'chzzk':
+      return `https://chzzk.naver.com/live/${encodeURIComponent(stream.id)}`;
+    case 'soop':
+      return `https://play.sooplive.com/${encodeURIComponent(stream.id)}/direct?fromApi=1`;
+    case 'twitch':
+      return `https://player.twitch.tv/?channel=${encodeURIComponent(stream.id)}&parent=${encodeURIComponent(parent)}&muted=${stream.muted ? 'true' : 'false'}`;
+    default:
+      return stream.id;
+  }
+}
+
+function buildOriginalUrl(stream) {
+  switch (stream.type) {
+    case 'youtube':
+      return `https://www.youtube.com/watch?v=${encodeURIComponent(stream.id)}`;
+    case 'chzzk':
+      return `https://chzzk.naver.com/live/${encodeURIComponent(stream.id)}`;
+    case 'soop':
+      return `https://play.sooplive.com/${encodeURIComponent(stream.id)}`;
+    case 'twitch':
+      return `https://www.twitch.tv/${encodeURIComponent(stream.id)}`;
+    default:
+      return stream.id;
+  }
+}
+
+async function createStream(raw, selectedPlatform) {
+  const value = cleanInput(raw);
+  const type = detectPlatform(value, selectedPlatform);
+
+  if (!value) throw new Error('주소 또는 ID를 입력해주세요.');
+
+  if (type === 'youtube') {
+    const target = value.replace(/^y:/i, '');
+    const directId = parseYouTubeId(target);
+    if (directId) {
+      return { localId: uid(), type, id: directId, label: `YouTube ${directId}`, muted: state.settings.muteNew };
+    }
+
+    showNotice('유튜브 채널의 현재 라이브 영상을 찾는 중입니다.');
+    const res = await fetch(`/api/youtube-live?target=${encodeURIComponent(target)}`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || '유튜브 라이브 영상을 찾지 못했습니다.');
+    return { localId: uid(), type, id: data.id, label: `YouTube ${target}`, muted: state.settings.muteNew };
+  }
+
+  if (type === 'chzzk') {
+    const id = extractPathId(value);
+    if (!/^[0-9a-f]{32}$/i.test(id)) throw new Error('치지직은 32자리 채널 UID가 필요합니다.');
+    return { localId: uid(), type, id, label: `CHZZK ${id}`, muted: state.settings.muteNew };
+  }
+
+  if (type === 'soop') {
+    const id = normalizeSoop(value);
+    if (!/^[a-z0-9]{3,12}$/i.test(id)) throw new Error('SOOP 아이디 형식이 맞지 않습니다.');
+    return { localId: uid(), type, id, label: `SOOP ${id}`, muted: state.settings.muteNew };
+  }
+
+  if (type === 'twitch') {
+    const id = normalizeTwitch(value);
+    if (!/^[a-z0-9_]{4,25}$/i.test(id)) throw new Error('트위치 아이디 형식이 맞지 않습니다.');
+    return { localId: uid(), type, id, label: `Twitch ${id}`, muted: state.settings.muteNew };
+  }
+
+  try {
+    const url = new URL(value);
+    return { localId: uid(), type: 'url', id: url.href, label: url.hostname, muted: state.settings.muteNew };
+  } catch {
+    throw new Error('플랫폼을 자동 감지하지 못했습니다.');
+  }
+}
+
+function reloadFrames() {
+  for (const tile of grid.querySelectorAll('.tile')) {
+    const stream = state.streams.find((item) => item.localId === tile.dataset.id);
+    const iframe = tile.querySelector('iframe');
+    if (stream && iframe) iframe.src = buildFrame(stream);
+  }
+}
+
+function moveStream(localId, direction) {
+  const index = state.streams.findIndex((stream) => stream.localId === localId);
+  const nextIndex = index + direction;
+  if (index < 0 || nextIndex < 0 || nextIndex >= state.streams.length) return;
+  const [stream] = state.streams.splice(index, 1);
+  state.streams.splice(nextIndex, 0, stream);
+  syncTileOrder();
+  persist();
+  applyGridLayout();
+}
+
+function syncTileOrder() {
+  for (const stream of state.streams) {
+    const tile = grid.querySelector(`[data-id="${CSS.escape(stream.localId)}"]`);
+    if (tile) grid.append(tile);
+  }
+}
+
+function pinStream(localId) {
+  const index = state.streams.findIndex((stream) => stream.localId === localId);
+  if (index <= 0) {
+    state.settings.columns = 'auto';
+    applyGridLayout();
+    persist();
+    return;
+  }
+
+  const [stream] = state.streams.splice(index, 1);
+  state.streams.unshift(stream);
+  state.settings.columns = 'auto';
+  syncTileOrder();
+  applyGridLayout();
+  columns.value = state.settings.columns;
+  persist();
+}
+
+function renameStream(stream, title) {
+  stream.label = title;
+  persist();
+}
+
+function cycleColumns() {
+  const values = ['auto', '1', '2', '3', '4'];
+  const index = values.indexOf(state.settings.columns);
+  state.settings.columns = values[(index + 1) % values.length];
+  persist();
+  render();
+}
+
+function enterViewerMode() {
+  document.body.classList.add('viewer');
+  if (document.fullscreenEnabled && !document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
+}
+
+function exitViewer() {
+  document.body.classList.remove('viewer');
+}
+
+function render() {
+  grid.innerHTML = '';
+  applyGridLayout();
+
+  columns.value = state.settings.columns;
+  compactMode.checked = state.settings.compact;
+  muteNew.checked = state.settings.muteNew;
+
+  if (state.streams.length === 0) {
+    grid.append(emptyTemplate.content.cloneNode(true));
+    renderParked();
+    return;
+  }
+
+  for (const stream of state.streams) {
+    grid.append(createTile(stream));
+  }
+  renderParked();
+}
+
+function applyGridLayout() {
+  const count = state.streams.length;
+  const useSmartLayout = state.settings.columns === 'auto' && count >= 1 && count <= 9;
+
+  grid.className = 'stream-grid';
+  grid.classList.toggle('compact', state.settings.compact);
+  grid.classList.toggle('fixed', state.settings.columns !== 'auto');
+  grid.classList.toggle('smart-layout', useSmartLayout);
+
+  if (useSmartLayout) {
+    grid.classList.add(`count-${count}`);
+    grid.style.removeProperty('--columns');
+  } else {
+    grid.style.setProperty('--columns', state.settings.columns === 'auto' ? 'auto-fit' : state.settings.columns);
+  }
+}
+
+function createTile(stream) {
+  const tile = document.createElement('article');
+  tile.className = 'tile';
+  tile.dataset.id = stream.localId;
+
+  const header = document.createElement('div');
+  header.className = 'tile-header';
+
+  const title = document.createElement('div');
+  title.className = 'tile-title';
+  title.textContent = stream.label;
+
+  const actions = document.createElement('div');
+  actions.className = 'tile-actions';
+
+  const original = document.createElement('button');
+  original.type = 'button';
+  original.title = '원본 페이지 열기';
+  original.className = 'text-action';
+  original.textContent = '원본';
+  original.addEventListener('click', () => {
+    window.open(buildOriginalUrl(stream), '_blank', 'noopener,noreferrer');
+  });
+
+  const copy = document.createElement('button');
+  copy.type = 'button';
+  copy.title = '방송 주소 복사';
+  copy.className = 'text-action';
+  copy.textContent = '복사';
+  copy.addEventListener('click', async () => {
+    const url = buildOriginalUrl(stream);
+    try {
+      await navigator.clipboard.writeText(url);
+      showNotice(`${stream.label} 주소를 복사했습니다.`);
+    } catch {
+      streamInput.value = url;
+      showNotice('클립보드가 막혀서 주소를 입력칸에 넣었습니다.');
+    }
+  });
+
+  const rename = document.createElement('button');
+  rename.type = 'button';
+  rename.title = '제목 변경';
+  rename.textContent = 'T';
+  rename.addEventListener('click', () => {
+    const nextTitle = prompt('타일 제목', stream.label);
+    if (!nextTitle) return;
+    renameStream(stream, nextTitle.trim());
+    title.textContent = stream.label;
+  });
+
+  const wide = document.createElement('button');
+  wide.type = 'button';
+  wide.title = '큰 화면으로 고정';
+  wide.textContent = 'W';
+  wide.addEventListener('click', () => {
+    pinStream(stream.localId);
+    showNotice(`${stream.label} 타일을 큰 화면으로 고정했습니다.`);
+  });
+
+  const fullscreen = document.createElement('button');
+  fullscreen.type = 'button';
+  fullscreen.title = '타일 전체화면';
+  fullscreen.textContent = 'F';
+  fullscreen.addEventListener('click', () => {
+    if (tile.requestFullscreen) tile.requestFullscreen().catch(() => {});
+  });
+
+  const up = document.createElement('button');
+  up.type = 'button';
+  up.title = '왼쪽/위로 이동';
+  up.textContent = '<';
+  up.addEventListener('click', () => moveStream(stream.localId, -1));
+
+  const down = document.createElement('button');
+  down.type = 'button';
+  down.title = '오른쪽/아래로 이동';
+  down.textContent = '>';
+  down.addEventListener('click', () => moveStream(stream.localId, 1));
+
+  const reload = document.createElement('button');
+  reload.type = 'button';
+  reload.title = '새로고침';
+  reload.textContent = 'R';
+  reload.addEventListener('click', () => {
+    const iframe = tile.querySelector('iframe');
+    iframe.src = buildFrame(stream);
+  });
+
+  const toggleMute = document.createElement('button');
+  toggleMute.type = 'button';
+  toggleMute.title = stream.muted ? '다음 로드부터 소리 켜기' : '다음 로드부터 음소거';
+  toggleMute.textContent = stream.muted ? 'M' : 'A';
+  toggleMute.addEventListener('click', () => {
+    stream.muted = !stream.muted;
+    toggleMute.title = stream.muted ? '다음 로드부터 소리 켜기' : '다음 로드부터 음소거';
+    toggleMute.textContent = stream.muted ? 'M' : 'A';
+    persist();
+  });
+
+  const park = document.createElement('button');
+  park.type = 'button';
+  park.title = '보관한 방송으로 내리기';
+  park.className = 'text-action';
+  park.textContent = '보관';
+  park.addEventListener('click', () => parkStream(stream.localId, tile));
+
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.title = '삭제';
+  remove.className = 'remove';
+  remove.textContent = 'X';
+  remove.addEventListener('click', () => {
+    state.streams = state.streams.filter((item) => item.localId !== stream.localId);
+    tile.remove();
+    if (state.streams.length === 0) render();
+    else applyGridLayout();
+    persist();
+  });
+
+  actions.append(original, copy, rename, wide, fullscreen, up, down, reload, toggleMute, park, remove);
+  header.append(title, actions);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'frame-wrap';
+
+  const iframe = document.createElement('iframe');
+  iframe.src = buildFrame(stream);
+  iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+  iframe.title = stream.label;
+
+  wrap.append(iframe);
+  tile.append(header, wrap);
+  return tile;
+}
+
+function renderParked() {
+  parkedGrid.innerHTML = '';
+  parkedSection.hidden = state.parked.length === 0;
+
+  for (const stream of state.parked) {
+    parkedGrid.append(createParkedTile(stream));
+  }
+}
+
+function createParkedTile(stream) {
+  const tile = document.createElement('article');
+  tile.className = 'parked-tile';
+  tile.dataset.id = stream.localId;
+
+  const title = document.createElement('strong');
+  title.textContent = stream.label;
+
+  const meta = document.createElement('span');
+  meta.textContent = `${stream.type.toUpperCase()} / ${stream.id}`;
+
+  const actions = document.createElement('div');
+  actions.className = 'parked-actions';
+
+  const restore = document.createElement('button');
+  restore.type = 'button';
+  restore.textContent = '복귀';
+  restore.title = '다시 위 방송 목록으로 올리기';
+  restore.addEventListener('click', () => restoreStream(stream.localId, tile));
+
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.textContent = '삭제';
+  remove.title = '보관 목록에서 삭제';
+  remove.className = 'remove';
+  remove.addEventListener('click', () => {
+    state.parked = state.parked.filter((item) => item.localId !== stream.localId);
+    tile.remove();
+    renderParked();
+    persist();
+  });
+
+  actions.append(restore, remove);
+  tile.append(title, meta, actions);
+  return tile;
+}
+
+function parkStream(localId, tile) {
+  const index = state.streams.findIndex((stream) => stream.localId === localId);
+  if (index < 0) return;
+
+  const [stream] = state.streams.splice(index, 1);
+  state.parked.push(stream);
+  tile.remove();
+  if (state.streams.length === 0) render();
+  else applyGridLayout();
+  renderParked();
+  persist();
+  showNotice(`${stream.label} 방송을 아래 보관 목록으로 옮겼습니다.`);
+}
+
+function restoreStream(localId, tile) {
+  const index = state.parked.findIndex((stream) => stream.localId === localId);
+  if (index < 0) return;
+
+  const [stream] = state.parked.splice(index, 1);
+  const wasEmpty = state.streams.length === 0;
+  state.streams.push(stream);
+  tile.remove();
+
+  if (wasEmpty) {
+    render();
+  } else {
+    applyGridLayout();
+    grid.append(createTile(stream));
+    renderParked();
+  }
+
+  persist();
+  showNotice(`${stream.label} 방송을 다시 위로 올렸습니다.`);
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  showNotice('');
+
+  try {
+    const parts = splitStreamInputs(streamInput.value);
+    const created = [];
+    const wasEmpty = state.streams.length === 0;
+
+    for (const part of parts) {
+      created.push(await createStream(part, platform.value));
+    }
+
+    state.streams.push(...created);
+    streamInput.value = '';
+    persist();
+    if (wasEmpty) {
+      render();
+    } else {
+      applyGridLayout();
+      for (const stream of created) {
+        grid.append(createTile(stream));
+      }
+    }
+    showNotice(`${created.length}개 방송을 추가했습니다.`);
+  } catch (error) {
+    showNotice(error.message || '추가하지 못했습니다.');
+  }
+});
+
+columns.addEventListener('change', () => {
+  state.settings.columns = columns.value;
+  persist();
+  render();
+});
+
+compactMode.addEventListener('change', () => {
+  state.settings.compact = compactMode.checked;
+  persist();
+  render();
+});
+
+muteNew.addEventListener('change', () => {
+  state.settings.muteNew = muteNew.checked;
+  persist();
+});
+
+clearStreams.addEventListener('click', () => {
+  state.streams = [];
+  state.parked = [];
+  persist();
+  render();
+  showNotice('전체 목록을 비웠습니다.');
+});
+
+reloadAll.addEventListener('click', () => {
+  reloadFrames();
+  showNotice('전체 방송을 새로고침했습니다.');
+});
+
+copyLink.addEventListener('click', async () => {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.searchParams.set('layout', encodeLayout(snapshot()));
+  url.searchParams.set('view', '1');
+
+  try {
+    await navigator.clipboard.writeText(url.toString());
+    showNotice('현재 배치 링크를 복사했습니다. 열면 영상만 보기 모드로 복원됩니다.');
+  } catch {
+    streamInput.value = url.toString();
+    showNotice('클립보드가 막혀서 링크를 입력칸에 넣었습니다.');
+  }
+});
+
+savePreset.addEventListener('click', () => {
+  const name = prompt('프리셋 이름');
+  if (!name) return;
+
+  const presets = getPresets().filter((preset) => preset.name !== name);
+  presets.push({ name, data: snapshot(), updatedAt: Date.now() });
+  presets.sort((a, b) => a.name.localeCompare(b.name));
+  setPresets(presets);
+  renderPresets();
+  presetList.value = name;
+  showNotice(`프리셋을 저장했습니다: ${name}`);
+});
+
+loadPreset.addEventListener('click', () => {
+  const preset = getPresets().find((item) => item.name === presetList.value);
+  if (!preset) {
+    showNotice('먼저 프리셋을 선택해주세요.');
+    return;
+  }
+  applySnapshot(preset.data);
+  persist();
+  render();
+  showNotice(`프리셋을 불러왔습니다: ${preset.name}`);
+});
+
+deletePreset.addEventListener('click', () => {
+  if (!presetList.value) {
+    showNotice('먼저 프리셋을 선택해주세요.');
+    return;
+  }
+  setPresets(getPresets().filter((preset) => preset.name !== presetList.value));
+  renderPresets();
+  showNotice('프리셋을 삭제했습니다.');
+});
+
+viewerMode.addEventListener('click', enterViewerMode);
+exitViewerMode.addEventListener('click', exitViewer);
+
+document.addEventListener('keydown', (event) => {
+  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement) return;
+  if (event.key === 'Escape') {
+    exitViewer();
+  }
+  if (event.key.toLowerCase() === 'v') enterViewerMode();
+  if (event.key.toLowerCase() === 'r') reloadFrames();
+  if (event.key.toLowerCase() === 'c') cycleColumns();
+});
+
+restore();
+renderPresets();
+render();
