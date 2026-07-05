@@ -296,12 +296,11 @@ kbd {
 }
 
 .tile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: 42px;
-  padding: 7px 9px;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 7px;
+  min-height: 74px;
+  padding: 8px 10px;
   background: var(--panel);
 }
 
@@ -311,13 +310,14 @@ kbd {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .tile-actions {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .tile-actions button {
@@ -351,7 +351,7 @@ body:not(.viewer) .stream-grid.smart-layout .frame-wrap {
 }
 
 body:not(.viewer) .stream-grid.smart-layout {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: none;
   grid-auto-flow: row;
 }
@@ -371,7 +371,7 @@ body:not(.viewer) .stream-grid.smart-layout .tile:first-child {
 
 .tile:fullscreen {
   display: grid;
-  grid-template-rows: 42px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   width: 100vw;
   height: 100vh;
   border: 0;
